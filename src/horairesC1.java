@@ -17,9 +17,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class horairesC1 implements Runnable {
-	private int heures ;
-	private int minutes ;
-	private int day;
+
 	protected JFrame frame;
 	protected JLabel lblMaupertuis;
 	protected JLabel lblJeanMace;
@@ -35,18 +33,16 @@ public class horairesC1 implements Runnable {
 	
 	private void MajC1(String p_url) 
 	{
-
 		Calendar cal =  Calendar.getInstance();
-		this.minutes = cal.get(Calendar.MINUTE);
-		this.heures =cal.get(Calendar.HOUR_OF_DAY) ;
-		this.day = cal.get(Calendar.DAY_OF_WEEK);
+		int heures = cal.get(Calendar.MINUTE);
+		int minutes =cal.get(Calendar.HOUR_OF_DAY) ;
+		int day = cal.get(Calendar.DAY_OF_WEEK);
 
 		try {
 			String ecrire ="";
 			boolean J = true;
 
 			JSONParser parser = new JSONParser();
-			//https://data.metromobilite.fr/api/routers/default/index/stops/SEM:1994"+"/stoptimes
 			URL web = new URL(p_url);
 
 			URLConnection connect = web.openConnection();
@@ -92,7 +88,7 @@ public class horairesC1 implements Runnable {
 
 				System.out.println("Le prochain passage du bus est a "+(int)divided+":"+(int)resultatFinal );
 
-				if(this.minutes<10){
+				if(minutes<10){
 					lblMaupertuis.setText("Passage a "+(int)divided+":"+(int)resultatFinal);
 				}else{
 					lblMaupertuis.setText("Passage a "+(int)divided+":"+(int)resultatFinal);
@@ -102,36 +98,6 @@ public class horairesC1 implements Runnable {
 		}catch (IOException | ParseException e1) {
 			e1.printStackTrace();
 		}
-	}
-
-
-	public int getHeures() {
-		return heures;
-	}
-
-
-	public void setHeures(int heures) {
-		this.heures = heures;
-	}
-
-
-	public int getMinutes() {
-		return minutes;
-	}
-
-
-	public void setMinutes(int minutes) {
-		this.minutes = minutes;
-	}
-
-
-	public int getDay() {
-		return day;
-	}
-
-
-	public void setDay(int day) {
-		this.day = day;
 	}
 
 
