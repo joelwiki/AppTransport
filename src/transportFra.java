@@ -12,10 +12,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import src.horairesC1;
-import src.horairesL13;
-import src.majHeures;
-
 public class transportFra extends JPanel implements Runnable {
 
 	/**
