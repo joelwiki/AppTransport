@@ -21,6 +21,10 @@ import java.awt.Font;
 
 public class transportFra extends JPanel implements Runnable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -221774984266295261L;
 	private static JFrame frame;
 	private int heures ;
 	private int minutes ;
@@ -33,41 +37,23 @@ public class transportFra extends JPanel implements Runnable {
 	protected Calendar cal =  Calendar.getInstance();
 	
 	static JLabel lblHeures;
+	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
+		EventQueue.invokeLater(new Runnable()
+		{
 			public void run() {
-				try {
-					transportFra window = new transportFra();
-					window.frame.setVisible(true);
-
+				try 
+				{
 					//Lancement en thread de la fenetre
-					Runnable run1 =  window;
-					Thread thread1 = new Thread(run1);
-					thread1.start();
-					//Lancement en thread des horaires du c1
-					Runnable transportC1MAJ = new horairesC1(lblMaupertuis,lblJeanMace, frame);
-					Thread thread2 =new Thread(transportC1MAJ);
-					thread2.start();
-					frame.repaint();
-					
-					
-					Runnable transportLigne13Maj = new horairesL13(lblLGM,lblPremol,frame);
-					Thread tL13 = new Thread(transportLigne13Maj);
-					tL13.start();
-					frame.repaint();
-
-				
-					Runnable heures =new majHeures(lblHeures,frame);
-					Thread threadHeures = new Thread(heures);
-					threadHeures.start();
-					frame.repaint();
-
-
-
-				} catch (Exception e) {
+					Runnable runnable1 = new transportFra();
+					Thread t = new Thread(runnable1);
+					t.start();
+				} 
+				catch (Exception e)
+				{
 					e.printStackTrace();
 				}
 			}
@@ -75,20 +61,10 @@ public class transportFra extends JPanel implements Runnable {
 	}
 
 	/**
-	 * Create the application.
-	 */
-	public transportFra() {
-		initialize();
-	}
-
-	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
-
-
-
-
+	private void initialize() 
+	{
 		frame = new JFrame();
 		frame.setBounds(100, 100, 480, 320);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -194,16 +170,28 @@ public class transportFra extends JPanel implements Runnable {
 		lblHeures.setFont(new Font("Segoe Print", Font.PLAIN, 14));
 		lblHeures.setBounds(10, 11, 132, 14);
 		frame.getContentPane().add(lblHeures);
-
-
 	}
 
-
-
-
 	@Override
-	public void run() {
-		// TODO Auto-generated method stub
+	public void run() 
+	{
+		this.initialize();
+		this.frame.setVisible(true);
+		//Lancement en thread des horaires du c1
+		Runnable transportC1MAJ = new horairesC1(lblMaupertuis,lblJeanMace, frame);
+		Thread thread2 =new Thread(transportC1MAJ);
+		thread2.start();
+		frame.repaint();
+		
+		Runnable transportLigne13Maj = new horairesL13(lblLGM,lblPremol,frame);
+		Thread tL13 = new Thread(transportLigne13Maj);
+		tL13.start();
+		frame.repaint();
+	
+		Runnable heures =new majHeures(lblHeures,frame);
+		Thread threadHeures = new Thread(heures);
+		threadHeures.start();
+		frame.repaint();
 
 	}
 }
