@@ -27,208 +27,102 @@ public class horairesL13 implements Runnable {
 	JLabel lblPremol;
 	JFrame frame;
 
-
-
-	public horairesL13(JLabel lblLGM, JLabel lblPremol, JFrame fenetre) {
-
+	
+	public horairesL13(JLabel lblLGM, JLabel lblPremol, JFrame fenetre)
+	{
 		this.lblLGM=lblLGM;
 		this.lblPremol=lblPremol;
 		this.frame=fenetre;
+	}
 
+	private void Maj(String p_url)
+	{
+		Calendar cal =  Calendar.getInstance();
+		int minutes = cal.get(Calendar.MINUTE);
+		int heures =cal.get(Calendar.HOUR_OF_DAY) ;
+		int day = cal.get(Calendar.DAY_OF_WEEK);
 
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
-			private int minutes;
-			private int heures;
+		try 
+		{
+			String ecrire ="";
+			boolean bool = true;
 
-			public void run()
-			{
-				Maj13LGM();
-				MajC1Premol();
-				frame.repaint();
-			}
+			JSONParser parser = new JSONParser();
 
+			URL web = new URL(p_url);
 
-			private void Maj13LGM() {
-				Calendar cal =  Calendar.getInstance();
-				minutes = cal.get(Calendar.MINUTE);
-				heures =cal.get(Calendar.HOUR_OF_DAY) ;
-				int day = cal.get(Calendar.DAY_OF_WEEK);
+			URLConnection connect = web.openConnection();
+			//Buffered in buffer
+			BufferedReader in = new BufferedReader(new InputStreamReader(connect.getInputStream()));
 
+			JSONArray jsonObject = (JSONArray) parser.parse(in);
 
+			Iterator i = jsonObject.iterator();
 
-				try {
-					String ecrire ="";
-					boolean J = true;
+			while(i.hasNext()) {
+				JSONObject innerObj = (JSONObject) i.next();
+				//System.out.println("times is : " + innerObj.get("times"));
 
-					int heuresMaupertuis = heures;
-					int minutesMaupertuis = minutes;
+				JSONArray array = (JSONArray) innerObj.get("times");
 
-					int heuresJeanMace = heuresMaupertuis;
-					int minutesJeanMace=minutesMaupertuis;
-
-					/*********************************************************************************************************************/
-
-					JSONParser parser = new JSONParser();
-
-					URL web = new URL("https://data.metromobilite.fr/api/routers/default/index/stops/SEM:0330"+"/stoptimes");
-
-					URLConnection connect = web.openConnection();
-					//Buffered in buffer
-					BufferedReader in = new BufferedReader(new InputStreamReader(connect.getInputStream()));
-
-					JSONArray jsonObject = (JSONArray) parser.parse(in);
-
-					Iterator i = jsonObject.iterator();
-
-					while(i.hasNext()) {
-						JSONObject innerObj = (JSONObject) i.next();
-						//System.out.println("times is : " + innerObj.get("times"));
-
-						JSONArray array = (JSONArray) innerObj.get("times");
-
-						Iterator j = array.iterator();
-						int verite = 0;
-						while(j.hasNext()==J) {
-							if(verite==1) {
-								J=false;
-							}else {
-								JSONObject Obj = (JSONObject) j.next();
-								ecrire = (String) Obj.get("realtimeArrival").toString();
-								//System.out.println("Arrivé prévu " + Obj.get("realtimeArrival"));
-								verite++;
-							}
-						}
-						int intParse = Integer.parseInt(ecrire);
-
-						//System.out.println(intParse);
-						float c = intParse;
-						int h = intParse;
-						int b = 3600;
-
-						float divided = h/b;
-						float reel = c/b;
-
-						//System.out.println(reel);
-						//System.out.println(divided);
-
-						float resultatFinal = (float) ((((reel-divided)/100)*60*100)+0.0001);
-
-						System.out.println("Le prochain passage du bus est a "+(int)divided+":"+(int)resultatFinal );
-
-						if(minutesJeanMace<10){
-							lblLGM.setText("Passage a "+(int)divided+":"+(int)resultatFinal);
-						}else{
-							lblLGM.setText("Passage a "+(int)divided+":"+(int)resultatFinal);
-						}
+				Iterator j = array.iterator();
+				int verite = 0;
+				while(j.hasNext()==bool) {
+					if(verite==1) {
+						bool=false;
+					}else {
+						JSONObject Obj = (JSONObject) j.next();
+						ecrire = (String) Obj.get("realtimeArrival").toString();
+						//System.out.println("Arrivé prévu " + Obj.get("realtimeArrival"));
+						verite++;
 					}
-				} catch (IOException e) {
-
-					e.printStackTrace();
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
+				int intParse = Integer.parseInt(ecrire);
 
-			}
+				//System.out.println(intParse);
+				float c = intParse;
+				int h = intParse;
+				int b = 3600;
 
-			private void MajC1Premol() {
-				Calendar cal =  Calendar.getInstance();
-				minutes = cal.get(Calendar.MINUTE);
-				heures =cal.get(Calendar.HOUR_OF_DAY) ;
-				int day = cal.get(Calendar.DAY_OF_WEEK);
+				float divided = h/b;
+				float reel = c/b;
 
+				//System.out.println(reel);
+				//System.out.println(divided);
 
+				float resultatFinal = (float) ((((reel-divided)/100)*60*100)+0.0001);
 
-				try {
-					String ecrire ="";
-					boolean J = true;
+				System.out.println("Le prochain passage du bus est a "+(int)divided+":"+(int)resultatFinal );
 
-					int heuresMaupertuis = heures;
-					int minutesMaupertuis = minutes;
-
-					int heuresJeanMace = heuresMaupertuis;
-					int minutesJeanMace=minutesMaupertuis;
-
-					/*********************************************************************************************************************/
-
-					JSONParser parser = new JSONParser();
-
-					URL web = new URL("https://data.metromobilite.fr/api/routers/default/index/stops/SEM:0368"+"/stoptimes");
-
-					URLConnection connect = web.openConnection();
-					//Buffered in buffer
-					BufferedReader in = new BufferedReader(new InputStreamReader(connect.getInputStream()));
-
-					JSONArray jsonObject = (JSONArray) parser.parse(in);
-
-					Iterator i = jsonObject.iterator();
-
-					while(i.hasNext()) {
-						JSONObject innerObj = (JSONObject) i.next();
-						//System.out.println("times is : " + innerObj.get("times"));
-
-						JSONArray array = (JSONArray) innerObj.get("times");
-
-						Iterator j = array.iterator();
-						int verite = 0;
-						while(j.hasNext()==J) {
-							if(verite==1) {
-								J=false;
-							}else {
-								JSONObject Obj = (JSONObject) j.next();
-								ecrire = (String) Obj.get("realtimeArrival").toString();
-								//System.out.println("Arrivé prévu " + Obj.get("realtimeArrival"));
-								verite++;
-							}
-						}
-						int intParse = Integer.parseInt(ecrire);
-
-						//System.out.println(intParse);
-						float c = intParse;
-						int h = intParse;
-						int b = 3600;
-
-						float divided = h/b;
-						float reel = c/b;
-
-						//System.out.println(reel);
-						//System.out.println(divided);
-
-						float resultatFinal = (float) ((((reel-divided)/100)*60*100)+0.0001);
-
-						System.out.println("Le prochain passage du bus est a "+(int)divided+":"+(int)resultatFinal );
-
-						if(minutesJeanMace<10){
-							lblPremol.setText("Passage a "+(int)divided+":"+(int)resultatFinal);
-						}else{
-							lblPremol.setText("Passage a "+(int)divided+":"+(int)resultatFinal);
-						}
-					}
-				} catch (IOException e) {
-
-					e.printStackTrace();
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if(minutes<10){
+					lblLGM.setText("Passage a "+(int)divided+":"+(int)resultatFinal);
+				}else{
+					lblLGM.setText("Passage a "+(int)divided+":"+(int)resultatFinal);
 				}
-
-
-
-
 			}
-
-		},0, 10000);
-
-
+		} 
+		catch (IOException | ParseException e) 
+		{
+			e.printStackTrace();
+		}
 
 	}
 
-
 	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-
+	public void run()
+	{
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() 
+		{
+			public void run()
+			{		
+				// Maj 13LGM
+				Maj("https://data.metromobilite.fr/api/routers/default/index/stops/SEM:0330/stoptimes");
+				// Maj C1 Premol
+				Maj("https://data.metromobilite.fr/api/routers/default/index/stops/SEM:0368/stoptimes");
+				frame.repaint();
+			}
+		},0, 10000);	
 	}
 
 }
